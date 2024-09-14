@@ -17,7 +17,14 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "prisma:migrate": "prisma migrate dev --schema=./prisma/schema.prisma",
+    "primsa:generate": "prisma generate --schema=./prisma/schema.prisma",
+    "prisma:migrate:prod": "prisma migrate deploy --schema=./prisma/schema.prisma",
+    "prisma:reset": "npx prisma migrate reset",
+    "prisma:generate": "npx prisma migrate dev --name your_migration_name --create-only",
+    "prisma:apply": "npx prisma migrate deploy",
+    "prisma:run": "npx prisma migrate dev --name your_migration_name"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -26,10 +33,13 @@
     "@nestjs/jwt": "^10.2.0",
     "@nestjs/passport": "^10.0.3",
     "@nestjs/platform-express": "^10.0.0",
+    "@prisma/client": "^5.19.1",
+    "nestjs-prisma": "^0.23.0",
     "passport": "^0.7.0",
     "passport-facebook": "^3.0.0",
     "passport-github2": "^0.1.12",
     "passport-google-oauth20": "^2.0.0",
+    "prisma": "^5.19.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },
@@ -52,7 +62,7 @@
     "supertest": "^6.3.3",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.1",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.1.3"
   },

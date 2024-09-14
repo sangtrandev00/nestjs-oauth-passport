@@ -1,0 +1,23 @@
+   version: '3.8'
+
+   services:
+     app:
+       build: .
+       ports:
+         - '4000:4000'  # Application port
+         - '9230:9230'  # Debugging port
+       environment:
+         DATABASE_URL: "postgresql://sangdev:trannhatsang@localhost:5432/postgres?schema=public"  # Use postgres user
+       depends_on:
+         - db
+       command: ["node", "--inspect=0.0.0.0:9230", "dist/main.js"]  # Start in debug mode
+
+     db:
+       image: postgres:13
+       restart: always
+       environment:
+         POSTGRES_USER: sangdev  # Create the postgres user
+         POSTGRES_PASSWORD: trannhatsang  # Set a password for the postgres user
+         POSTGRES_DB: postgres  # Create the default database
+       ports:
+         - '5432:5432'
