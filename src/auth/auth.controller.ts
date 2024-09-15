@@ -1,9 +1,14 @@
 // src/auth/auth.controller.ts
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { AuthService } from './auth.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
+
+    constructor(private readonly authService: AuthService, private readonly configService: ConfigService) { }
+
     @Get('google')
     @UseGuards(AuthGuard('google'))
     async googleAuth(@Req() req) {
@@ -11,17 +16,25 @@ export class AuthController {
         // The AuthGuard will handle the redirection
         console.log("res", req);
     }
-
+    // TODO: Add a decorator to check if the user is already logged in
     @Get('google/callback')
     @UseGuards(AuthGuard('google'))
-    googleAuthRedirect(@Req() req, @Res() res) {
+    async googleAuthRedirect(@Req() req, @Res() res, @Query('code') code: string) {
         // Handle the callback from Google
         const user = req.user; // Get user info
+        const jwt = this.authService.generateJwt(user); // Generate JWT
 
-        console.log("user", user);
+        const expires = new Date();
+        const jwtExpire = this.configService.get('JWT_EXPIRATION');
+        expires.setSeconds(
+            expires.getSeconds() + jwtExpire,
+        );
+
+        // Store JWT in a cookie or local storage
+        res.cookie('jwt', jwt, { httpOnly: true, expires }); // Example of setting a cookie
+        res.redirect('http://localhost:4200'); // Redirect to your frontend
 
         // Here you can redirect to your frontend or send a response
-        res.redirect('http://localhost:4200'); // Redirect to your Angular app
         // Optionally, you can also send user info or a token
     }
 

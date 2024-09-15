@@ -14,12 +14,14 @@ datasource db {
 }
 
 model User {
-  id      Int     @id @default(autoincrement())
-  name    String
-  email   String  @unique
-  posts   Post[]
-  address String?
-  phone   String?
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  username String?
+  password String?
+  posts    Post[]
+  address  String?
+  phone    String?
 
   // Base fields
   createdAt DateTime  @default(now())
