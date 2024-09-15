@@ -18,6 +18,8 @@ export class AuthController {
     }
     // TODO: Add a decorator to check if the user is already logged in
     @Get('google/callback')
+    // Guard 1
+    // Guard 2
     @UseGuards(AuthGuard('google'))
     async googleAuthRedirect(@Req() req, @Res() res, @Query('code') code: string) {
         // Handle the callback from Google
